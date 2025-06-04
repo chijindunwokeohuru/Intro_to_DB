@@ -12,13 +12,11 @@ def main():
         choice = input("Enter your choice: ")
 
         if choice == '1':
-            # Prompt for and add an item
             item = input("Enter the item to add: ")
             shopping_list.append(item)
             print(f"'{item}' has been added to your shopping list.")
         
         elif choice == '2':
-            # Prompt for and remove an item
             if not shopping_list:
                 print("Your shopping list is empty.")
                 continue
@@ -31,7 +29,6 @@ def main():
                 print(f"'{item}' was not found in your shopping list.")
         
         elif choice == '3':
-            # Display the shopping list
             if not shopping_list:
                 print("Your shopping list is empty.")
             else:
