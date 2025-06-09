@@ -5,66 +5,51 @@ from simple_calculator import SimpleCalculator
 class TestSimpleCalculator(unittest.TestCase):
     def setUp(self):
         """Set up test cases."""
-        self.calculator = SimpleCalculator()
+        self.calc = SimpleCalculator()
 
     def test_addition(self):
         """Test addition operations."""
-        assert self.calculator.add(2, 3) == 5
-        assert self.calculator.add(-1, 1) == 0
-        assert self.calculator.add(-1, -1) == -2
-        assert self.calculator.add(0, 0) == 0
+        self.assertEqual(self.calc.add(2, 3), 5)
+        self.assertEqual(self.calc.add(-1, 1), 0)
+        self.assertEqual(self.calc.add(-1, -1), -2)
+        self.assertEqual(self.calc.add(0, 0), 0)
 
     def test_subtraction(self):
         """Test subtraction operations."""
-        assert self.calculator.subtract(5, 3) == 2
-        assert self.calculator.subtract(1, 1) == 0
-        assert self.calculator.subtract(-1, -1) == 0
-        assert self.calculator.subtract(0, 0) == 0
+        self.assertEqual(self.calc.subtract(5, 3), 2)
+        self.assertEqual(self.calc.subtract(1, 1), 0)
+        self.assertEqual(self.calc.subtract(-1, -1), 0)
+        self.assertEqual(self.calc.subtract(0, 0), 0)
 
     def test_multiplication(self):
         """Test multiplication operations."""
-        assert self.calculator.multiply(2, 3) == 6
-        assert self.calculator.multiply(-2, 3) == -6
-        assert self.calculator.multiply(-2, -3) == 6
-        assert self.calculator.multiply(0, 5) == 0
+        self.assertEqual(self.calc.multiply(2, 3), 6)
+        self.assertEqual(self.calc.multiply(-2, 3), -6)
+        self.assertEqual(self.calc.multiply(-2, -3), 6)
+        self.assertEqual(self.calc.multiply(0, 5), 0)
 
     def test_division(self):
         """Test division operations."""
-        assert self.calculator.divide(6, 2) == 3
-        assert self.calculator.divide(5, 2) == 2.5
-        assert self.calculator.divide(-6, 2) == -3
-        assert self.calculator.divide(-6, -2) == 3
-        assert self.calculator.divide(0, 5) == 0
+        self.assertEqual(self.calc.divide(6, 2), 3)
+        self.assertEqual(self.calc.divide(5, 2), 2.5)
+        self.assertEqual(self.calc.divide(-6, 2), -3)
+        self.assertEqual(self.calc.divide(-6, -2), 3)
+        self.assertEqual(self.calc.divide(0, 5), 0)
 
     def test_division_by_zero(self):
         """Test division by zero."""
-        assert self.calculator.divide(5, 0) is None
+        self.assertIsNone(self.calc.divide(5, 0))
 
     def test_invalid_input(self):
         """Test invalid input types."""
-        try:
-            self.calculator.add("2", 3)
-            assert False, "Expected TypeError for invalid input"
-        except TypeError:
-            pass
-
-        try:
-            self.calculator.subtract(2, "3")
-            assert False, "Expected TypeError for invalid input"
-        except TypeError:
-            pass
-
-        try:
-            self.calculator.multiply("2", 3)
-            assert False, "Expected TypeError for invalid input"
-        except TypeError:
-            pass
-
-        try:
-            self.calculator.divide(2, "3")
-            assert False, "Expected TypeError for invalid input"
-        except TypeError:
-            pass
+        with self.assertRaises(TypeError):
+            self.calc.add("2", 3)
+        with self.assertRaises(TypeError):
+            self.calc.subtract(2, "3")
+        with self.assertRaises(TypeError):
+            self.calc.multiply("2", 3)
+        with self.assertRaises(TypeError):
+            self.calc.divide(2, "3")
 
 
 if __name__ == '__main__':
