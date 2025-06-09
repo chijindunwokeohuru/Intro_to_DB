@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import sys
 from robust_division_calculator import safe_divide
 

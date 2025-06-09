@@ -1,92 +1,51 @@
 #!/usr/bin/env python3
-class DivisionCalculator:
-    def __init__(self):
-        """Initialize the division calculator."""
-        self.last_result = None
-        self.error_message = None
 
-    def divide(self, dividend, divisor):
-        """
-        Perform division with robust error handling.
+def safe_divide(numerator, denominator):
+    """
+    Perform division with robust error handling.
+    
+    Args:
+        numerator: The number to be divided
+        denominator: The number to divide by
         
-        Args:
-            dividend: The number to be divided
-            divisor: The number to divide by
-            
-        Returns:
-            float: The result of the division if successful
-            None: If division fails
-        """
-        # reset error message
-        self.error_message = None
-        
-        # check if inputs are numbers
-        try:
-            dividend = float(dividend)
-            divisor = float(divisor)
-        except (ValueError, TypeError):
-            self.error_message = "Error: Both inputs must be numbers"
-            return None
+    Returns:
+        str: The result of the division or an error message
+    """
+    # Check if inputs are numbers
+    try:
+        numerator = float(numerator)
+        denominator = float(denominator)
+    except (ValueError, TypeError):
+        return "Error: Please enter numeric values only."
 
-        # check for division by zero
-        if divisor == 0:
-            self.error_message = "Error: Division by zero is not allowed"
-            return None
+    # Check for division by zero
+    if denominator == 0:
+        return "Error: Cannot divide by zero."
 
-        # check for infinity
-        if abs(dividend) == float('inf') or abs(divisor) == float('inf'):
-            self.error_message = "Error: Cannot perform division with infinity"
-            return None
-
-        # check for NaN
-        if dividend != dividend or divisor != divisor:  # NaN check
-            self.error_message = "Error: Cannot perform division with NaN"
-            return None
-
-        # perform division
-        try:
-            result = dividend / divisor
-            self.last_result = result
-            return result
-        except Exception as e:
-            self.error_message = f"Error: An unexpected error occurred: {str(e)}"
-            return None
-
-    def get_last_result(self):
-        """Get the last successful division result."""
-        return self.last_result
-
-    def get_error_message(self):
-        """Get the last error message if any."""
-        return self.error_message
+    # Perform division
+    try:
+        result = numerator / denominator
+        return f"The result of the division is {result}"
+    except Exception as e:
+        return f"Error: An unexpected error occurred: {str(e)}"
 
 
 def main():
-    calculator = DivisionCalculator()
-    
     # Test cases
     test_cases = [
-        (10, 2),      # Normal division
+        (10, 5),      # Normal division
         (10, 0),      # Division by zero
-        (0, 5),       # Zero dividend
-        ("abc", 2),   # Invalid input
-        (float('inf'), 2),  # Infinity
-        (2, float('inf')),  # Infinity
-        (float('nan'), 2),  # NaN
-        (2, float('nan')),  # NaN
+        (0, 5),       # Zero numerator
+        ("ten", 5),   # Invalid input
     ]
 
     print("Testing Division Calculator:")
     print("-" * 30)
     
-    for dividend, divisor in test_cases:
-        print(f"\nDividing {dividend} by {divisor}:")
-        result = calculator.divide(dividend, divisor)
-        
-        if result is not None:
-            print(f"Result: {result}")
-        else:
-            print(f"Error: {calculator.get_error_message()}")
+    for numerator, denominator in test_cases:
+        print(f"\nDividing {numerator} by {denominator}:")
+        result = safe_divide(numerator, denominator)
+        print(result)
 
 
 if __name__ == "__main__":
