@@ -1,169 +1,88 @@
 #!/usr/bin/env python3
 
-class LibraryManagement:
-    """A class to manage a library's books and members."""
+class Book:
+    """A class representing a book in the library."""
+
+    def __init__(self, title, author):
+        """Initialize a book with title and author."""
+        self.title = title
+        self.author = author
+        self._is_checked_out = False
+
+    def check_out(self):
+        """Check out the book."""
+        if not self._is_checked_out:
+            self._is_checked_out = True
+            return True
+        return False
+
+    def return_book(self):
+        """Return the book to the library."""
+        if self._is_checked_out:
+            self._is_checked_out = False
+            return True
+        return False
+
+    def is_available(self):
+        """Check if the book is available."""
+        return not self._is_checked_out
+
+    def __str__(self):
+        """Return a string representation of the book."""
+        return f"{self.title} by {self.author}"
+
+
+class Library:
+    """A class representing a library."""
 
     def __init__(self):
-        """Initialize the library management system."""
-        self.books = {}  
-        self.members = {}  
-        self.next_book_id = 1
-        self.next_member_id = 1
+        """Initialize an empty library."""
+        self._books = []
 
-    def add_book(self, title, author):
-        """
-        Add a new book to the library.
-        
-        Args:
-            title (str): The title of the book
-            author (str): The author of the book
-            
-        Returns:
-            int: The ID of the newly added book
-        """
-        book_id = self.next_book_id
-        self.books[book_id] = {
-            'title': title,
-            'author': author,
-            'available': True
-        }
-        self.next_book_id += 1
-        return book_id
+    def add_book(self, book):
+        """Add a book to the library."""
+        self._books.append(book)
 
-    def add_member(self, name):
-        """
-        Add a new member to the library.
-        
-        Args:
-            name (str): The name of the member
-            
-        Returns:
-            int: The ID of the newly added member
-        """
-        member_id = self.next_member_id
-        self.members[member_id] = {
-            'name': name,
-            'borrowed_books': []
-        }
-        self.next_member_id += 1
-        return member_id
+    def check_out_book(self, title):
+        """Check out a book by title."""
+        for book in self._books:
+            if book.title == title and book.is_available():
+                return book.check_out()
+        return False
 
-    def borrow_book(self, book_id, member_id):
-        """
-        Allow a member to borrow a book.
-        
-        Args:
-            book_id (int): The ID of the book to borrow
-            member_id (int): The ID of the member borrowing the book
-            
-        Returns:
-            bool: True if the book was successfully borrowed, False otherwise
-        """
-        if book_id not in self.books or member_id not in self.members:
-            return False
-
-        if not self.books[book_id]['available']:
-            return False
-
-        if book_id in self.members[member_id]['borrowed_books']:
-            return False
-
-        self.books[book_id]['available'] = False
-        self.members[member_id]['borrowed_books'].append(book_id)
-        return True
-
-    def return_book(self, book_id, member_id):
-        """
-        Allow a member to return a book.
-        
-        Args:
-            book_id (int): The ID of the book to return
-            member_id (int): The ID of the member returning the book
-            
-        Returns:
-            bool: True if the book was successfully returned, False otherwise
-        """
-        if book_id not in self.books or member_id not in self.members:
-            return False
-
-        if book_id not in self.members[member_id]['borrowed_books']:
-            return False
-
-        self.books[book_id]['available'] = True
-        self.members[member_id]['borrowed_books'].remove(book_id)
-        return True
-
-    def get_book_info(self, book_id):
-        """
-        Get information about a specific book.
-        
-        Args:
-            book_id (int): The ID of the book
-            
-        Returns:
-            dict: Book information or None if book doesn't exist
-        """
-        return self.books.get(book_id)
-
-    def get_member_info(self, member_id):
-        """
-        Get information about a specific member.
-        
-        Args:
-            member_id (int): The ID of the member
-            
-        Returns:
-            dict: Member information or None if member doesn't exist
-        """
-        return self.members.get(member_id)
+    def return_book(self, title):
+        """Return a book by title."""
+        for book in self._books:
+            if book.title == title and not book.is_available():
+                return book.return_book()
+        return False
 
     def list_available_books(self):
-        """
-        Get a list of all available books.
-        
-        Returns:
-            list: List of available book IDs
-        """
-        return [book_id for book_id, book in self.books.items() if book['available']]
-
-    def list_borrowed_books(self, member_id):
-        """
-        Get a list of books borrowed by a specific member.
-        
-        Args:
-            member_id (int): The ID of the member
-            
-        Returns:
-            list: List of borrowed book IDs or None if member doesn't exist
-        """
-        if member_id not in self.members:
-            return None
-        return self.members[member_id]['borrowed_books']
+        """List all available books."""
+        for book in self._books:
+            if book.is_available():
+                print(book)
 
 
 def main():
-    library = LibraryManagement()
+    # Setup a small library
+    library = Library()
+    library.add_book(Book("Brave New World", "Aldous Huxley"))
+    library.add_book(Book("1984", "George Orwell"))
 
-    book1_id = library.add_book("The Great Gatsby", "F. Scott Fitzgerald")
-    book2_id = library.add_book("1984", "George Orwell")
-    book3_id = library.add_book("To Kill a Mockingbird", "Harper Lee")
+    # Initial list of available books
+    print("Available books after setup:")
+    library.list_available_books()
 
-    member1_id = library.add_member("John Doe")
-    member2_id = library.add_member("Jane Smith")
+    # Simulate checking out a book
+    library.check_out_book("1984")
+    print("\nAvailable books after checking out '1984':")
+    library.list_available_books()
 
-    print("Borrowing books...")
-    print(f"John borrowing The Great Gatsby: {library.borrow_book(book1_id, member1_id)}")
-    print(f"Jane borrowing 1984: {library.borrow_book(book2_id, member2_id)}")
-    print(f"John trying to borrow 1984: {library.borrow_book(book2_id, member1_id)}")  # Should fail
-
-    print("\nReturning books...")
-    print(f"John returning The Great Gatsby: {library.return_book(book1_id, member1_id)}")
-    print(f"Jane returning 1984: {library.return_book(book2_id, member2_id)}")
-
-    print("\nAvailable books:", library.list_available_books())
-
-    print("\nJohn's borrowed books:", library.list_borrowed_books(member1_id))
-    print("Jane's borrowed books:", library.list_borrowed_books(member2_id))
+    # Simulate returning a book
+    library.return_book("1984")
+    print("\nAvailable books after returning '1984':")
+    library.list_available_books()
 
 
 if __name__ == "__main__":
