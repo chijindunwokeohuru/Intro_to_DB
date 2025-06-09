@@ -11,18 +11,15 @@ def safe_divide(numerator, denominator):
     Returns:
         str: The result of the division or an error message
     """
-    # Check if inputs are numbers
     try:
         numerator = float(numerator)
         denominator = float(denominator)
     except (ValueError, TypeError):
         return "Error: Please enter numeric values only."
 
-    # Check for division by zero
     if denominator == 0:
         return "Error: Cannot divide by zero."
 
-    # Perform division
     try:
         result = numerator / denominator
         return f"The result of the division is {result}"
@@ -33,10 +30,10 @@ def safe_divide(numerator, denominator):
 def main():
     # Test cases
     test_cases = [
-        (10, 5),      # Normal division
-        (10, 0),      # Division by zero
-        (0, 5),       # Zero numerator
-        ("ten", 5),   # Invalid input
+        (10, 5),      
+        (10, 0),      
+        (0, 5),       
+        ("ten", 5),
     ]
 
     print("Testing Division Calculator:")
